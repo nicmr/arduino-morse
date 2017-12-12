@@ -1,12 +1,6 @@
 #include <Arduino.h>
 #include <stdio.h>
 
-
-const char string[] = "SOS";
-const int length = sizeof string/sizeof *string;
-
-uint8_t morseArray[length]; //for less optimized multibyte system
-
 int ouputPin = 13;  //defines output pin for pinMode and custom functions
 
 class Morser{
@@ -17,7 +11,7 @@ class Morser{
 
     void generateMorse(){
         for (int i=0; i++; i <= _message.length()){
-            switch (string[i]){
+            switch (_message[i]){
                 case 'A': _morseArray[i] = 0b10110000; break; //0xB0
                 case 'O': _morseArray[i] = 0b11111100; break; //0xFC
                 case 'S': _morseArray[i] = 0b11101000; break; //0xE8
@@ -52,6 +46,7 @@ void setup() {
     //pin definitions
     pinMode(ouputPin, OUTPUT);
 }
+
 namespace utilities{
     //organises utility functions in their own namespace
 
@@ -91,9 +86,3 @@ void loop() {
     morses.generateMorse();
     morses.sendSignal();
 }
-
-
-
-
-
-
