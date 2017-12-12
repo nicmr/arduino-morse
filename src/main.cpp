@@ -6,7 +6,6 @@ const char string[] = "SOS";
 const int length = sizeof string/sizeof *string;
 
 uint8_t morseArray[length]; //for less optimized multibyte system
-//uint8_t morseInput = 0; //still unused, for optimized single byte system
 
 int ouputPin = 13;  //defines output pin for pinMode and custom functions
 
@@ -16,12 +15,15 @@ void setup() {
     //parse string to MorseByteArray
     for (int i=0; i++; i<=length){
         switch (string[i]){
-            case 'A': morseArray[i] = 0xB0; break;
-            case 'O': morseArray[i] = 0xFC; break;
-            case 'S': morseArray[i] = 0xE8; break;
+            case 'A': morseArray[i] = 0b10110000; break; //0xB0
+            case 'O': morseArray[i] = 0b11111100; break; //0xFC
+            case 'S': morseArray[i] = 0b11101000; break; //0xE8
         }
 
     }
+    //alternative:
+    static uint8_t mapping[] = {0b10110000}; //hex or binary in alphabetic order
+
 
     //pin definitions
     pinMode(ouputPin, OUTPUT);
@@ -30,6 +32,12 @@ void setup() {
 uint8_t getBitAt(uint8_t n, int k){
     //gets the bit of n at position k --zero-indexed??
     return (n >> k) & 1;
+}
+
+int parseTwoBitInstruction(int index){
+    int first;
+    int second;
+    return first + second;
 }
 
 void shortSignal(){
@@ -53,6 +61,7 @@ void convertToSignal(int a){
     for(int r=0; r+=2; r<=6){
         uint8_t first = getBitAt(a, r+1);
         uint8_t second = getBitAt(a, r+2);
+        int signal = parseTwoBitInstruction(r);
 
         if (first && second){
             longSignal();
